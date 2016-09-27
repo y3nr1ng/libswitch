@@ -95,9 +95,6 @@ class SSH(object):
     def connect(self, hostname, username=None, password=None) :
         # Establish the connection with hops first.
         if hops :
-            print('not support')
-
-
-
+            self.logger.error('Hop through servers not supported')
 
     def __exit__(self, e_type, e_val, trace) :
