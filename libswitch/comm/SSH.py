@@ -18,9 +18,6 @@ class SSH(object):
         # Set the logger.
         self.logger = logging.getLogger('libswitch.comm.SSH')
 
-    def __enter__(self):
-        return self
-
     def connect(self, cred, via=[]):
         self.transport_list = []
 
@@ -29,9 +26,8 @@ class SSH(object):
 
         # Hop through the sites.
         for v in via:
-            self.logger.debug('Connect to {}:{}'.format(v.host, v.port))
-
             addr = (v.host, v.port)
+            self.logger.debug('Connect to {}:{}'.format(*addr))
             if not self.transport_list:
                 t = paramiko.Transport(addr)
             else:
@@ -49,7 +45,7 @@ class SSH(object):
         self.session = t.open_session()
 
         #DEBUG
-        self.send('sh ?')
+        self.send('show proc cpu history')
         res = self.receive()
         self.logger.info(res)
 
@@ -58,13 +54,13 @@ class SSH(object):
         ret = self.session.recv_exit_status()
         return ret
 
-    def receive(self, size=1024):
+    def receive(self, batch_size=1024):
         buf = ''
         while self.session.recv_ready():
-            buf += self.__decode_byte_stream(self.session.recv(size))
+            buf += self._decode_byte_stream(self.session.recv(batch_size))
         return buf
 
-    def __decode_byte_stream(self, b):
+    def _decode_byte_stream(self, b):
         return b.decode('utf-8', errors='ignore')
 
     def __exit__(self, e_type, e_val, trace) :
