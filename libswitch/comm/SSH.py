@@ -44,11 +44,6 @@ class SSH(object):
         t = self.transport_list[-1]
         self.session = t.open_session()
 
-        #DEBUG
-        self.send('show proc cpu history')
-        res = self.receive()
-        self.logger.info(res)
-
     def send(self, cmd):
         self.session.exec_command(cmd)
         ret = self.session.recv_exit_status()
