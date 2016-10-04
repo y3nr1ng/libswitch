@@ -48,37 +48,35 @@ class SSH(object):
         self.logger = logging.getLogger('libswitch.comm.SSH')
 
         # Define the variables.
-        self.transport_list = []
+        self.via_transport = []
+        self.dest_cred = None
         self.channel = None
 
     def connect(self, dest_cred, via=None):
-        self.transport_list = []
+        if self.via_transport:
+            self.logger.warning("Original transport list will be wiped")
+            self.via_transport = []
 
-        # Last item in the via is the destination.
-        via.append(dest_cred)
+        self.dest_cred = dest_cred
 
         # Hop through the sites.
         for v in via:
             addr = (v.host, v.port)
-            if not self.transport_list:
+            if not self.via_transport:
                 t = paramiko.Transport(addr)
             else:
                 # Get the last transport.
-                t0 = self.transport_list[-1]
+                t0 = self.via_transport[-1]
                 # Start the forwarding.
                 ch = t0.open_channel('direct-tcpip', addr, ('127.0.0.1', 0))
                 t = paramiko.Transport(ch)
             t.start_client()
             t.auth_password(v.username, v.password)
             self.logger.debug('Connected to %s@%s:%d', v.username, v.host, v.port)
-            self.transport_list.append(t)
-
-        self.dest = dest_cred
+            self.via_transport.append(t)
 
     def send(self, cmd):
-        # Open a shell session.
-        t = self.transport_list.pop()
-        ch = t.open_session()
+        ch = self._connect_dest()
 
         # Execute the command and get the return status.
         ch.exec_command(cmd)
@@ -86,19 +84,24 @@ class SSH(object):
 
         self.channel = ch
 
-        #TODO: Dirty hack.
-        # Re-establish the transport.
-        addr = (self.dest.host, self.dest.port)
-        # Get the last transport.
-        t0 = self.transport_list[-1]
-        # Start the forwarding.
-        ch = t0.open_channel('direct-tcpip', addr, ('127.0.0.1', 0))
-        t = paramiko.Transport(ch)
-        t.start_client()
-        t.auth_password(self.dest.username, self.dest.password)
-        self.transport_list.append(t)
-
         return ret
+
+    def _connect_dest(self):
+        cred = self.dest_cred
+
+        addr = (cred.host, cred.port)
+        # Get the last endpoint.
+        t_end = self.via_transport[-1]
+        # Start the forwarding.
+        ch = t_end.open_channel('direct-tcpip', addr, ('127.0.0.1', 0))
+        t = paramiko.Transport(ch)
+
+        # Establish connection to the destination.
+        t.start_client()
+        t.auth_password(cred.username, cred.password)
+
+        # Open a channel.
+        return t.open_session()
 
     def receive(self, batch_size=1024):
         buf = ''

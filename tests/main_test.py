@@ -13,18 +13,17 @@ c = Comm()
 c.connect(target, via=vias)
 
 #DEBUG
-c.send('sh ver')
+c.send('sh ver | i uptime|''IOS Software''|''Boot Loader''')
 res = c.receive()
 logger.info(res)
 
-c.send('sh clu mem')
+c.send('sh ip int')
 res = c.receive()
 logger.info(res)
 
-c.send('sh proc cpu hist')
-res = c.receive()
-logger.info(res)
+for i in range(10):
+    c.send('sh proc cpu | i ''CPU utilization''')
+    res = c.receive()
+    logger.info(res)
 
-c.send('sh proc cpu sorted 5s')
-res = c.receive()
-logger.info(res)
+    time.sleep(1)
