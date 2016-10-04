@@ -7,7 +7,6 @@ from secret import vias, target
 
 import logging
 logger = logging.getLogger('libswitch.tests')
-import time
 
 c = Comm()
 c.connect(target, via=vias)
@@ -20,10 +19,3 @@ logger.info(res)
 c.send('sh ip int')
 res = c.receive()
 logger.info(res)
-
-for i in range(10):
-    c.send('sh proc cpu | i ''CPU utilization''')
-    res = c.receive()
-    logger.info(res)
-
-    time.sleep(1)
