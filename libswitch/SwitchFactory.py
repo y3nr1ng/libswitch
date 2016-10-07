@@ -1,15 +1,15 @@
 class SwitchFactory:
     factories = {}
 
-    def addFactory(id, switchFactory) :
-        SwitchFactory.factories.put[id] = switchFactory
+    def addFactory(id, switchFactory):
+        SwitchFactory.factories[id] = switchFactory
     addFactory = staticmethod(addFactory)
 
     # Template method.
-    def createSwitch(id) :
-        if not SwitchFactory.factories.has_key(id) :
+    def createSwitch(id):
+        if key not in SwitchFactory.factories:
             SwitchFactory.factories[id] = eval(id + '.Factory()')
-        return SwitchFactory.factories[id].create()
+        return SwitchFactory.factories[id] #return SwitchFactory.factories[id].create()
     createSwitch = staticmethod(createSwitch)
 
 """
