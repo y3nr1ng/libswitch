@@ -9,7 +9,7 @@ class SwitchFactory:
     def createSwitch(id):
         if key not in SwitchFactory.factories:
             SwitchFactory.factories[id] = eval(id + '.Factory()')
-        return SwitchFactory.factories[id] #return SwitchFactory.factories[id].create()
+        return SwitchFactory.factories[id].create()
     createSwitch = staticmethod(createSwitch)
 
 """
