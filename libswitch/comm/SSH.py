@@ -46,7 +46,7 @@ class SSHCredential:
 class SSH(Base):
     def __init__(self):
         # Set the logger.
-        self.logger = logging.getLogger('libswitch.comm.SSH')
+        self.logger = logging.getLogger('libswitch.comm.ssh')
 
         # Define the variables.
         self.via_transport = []
