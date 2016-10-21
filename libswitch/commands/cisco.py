@@ -5,4 +5,4 @@ class Cisco(Base):
         pass
 
     def setComm(self, comm):
-        pass
+        self.comm = comm
