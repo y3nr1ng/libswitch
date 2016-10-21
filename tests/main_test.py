@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import libswitch.comm.ssh as Comm
+from libswitch.comm import SSH as Comm
 from secret import vias, target
 
 import logging
