@@ -2,10 +2,10 @@
 This module facilitate connection with the switch through SSH.
 """
 
+from .base import Base
+import paramiko
 import logging
 import os
-import paramiko
-from .base import Base
 
 class SSHCredential:
     """
