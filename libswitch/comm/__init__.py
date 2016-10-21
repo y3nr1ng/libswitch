@@ -1,1 +1,1 @@
-from libswitch.comm.SSH import SSH
+from libswitch.comm.ssh import SSH

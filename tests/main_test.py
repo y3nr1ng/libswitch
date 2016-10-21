@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import libswitch.comm.SSH as Comm
+import libswitch.comm.ssh as Comm
 from secret import vias, target
 
 import logging
@@ -11,11 +11,11 @@ logger = logging.getLogger('libswitch.tests')
 c = Comm()
 c.connect(target, via=vias)
 
-#DEBUG
-c.send('sh ver | i uptime|''IOS Software''|''Boot Loader''')
-res = c.receive()
-logger.info(res)
+##DEBUG
+#c.send('sh ver | i uptime|''IOS Software''|''Boot Loader''')
+#res = c.receive()
+#logger.info(res)
 
-c.send('sh ip int')
+c.send('sh ip cef sw s f')
 res = c.receive()
 logger.info(res)
