@@ -5,6 +5,8 @@ sys.path.insert(0, os.path.abspath('..'))
 from libswitch.comm import SSH as Comm
 from secret import vias, target
 
+from libswitch.commands import Cisco
+
 import logging
 logger = logging.getLogger('libswitch.tests')
 
@@ -16,6 +18,6 @@ c.connect(target, via=vias)
 #res = c.receive()
 #logger.info(res)
 
-c.send('sh ip cef sw s f')
-res = c.receive()
-logger.info(res)
+cmd = Cisco()
+cmd.setComm(c)
+c.listChannel()
