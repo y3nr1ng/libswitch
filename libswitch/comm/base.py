@@ -1,3 +1,7 @@
+"""
+Common definitinos for the communication protocols.
+"""
+
 from abc import ABCMeta, abstractmethod
 
 class Base(metaclass=ABCMeta):
