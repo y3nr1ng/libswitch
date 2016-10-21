@@ -5,7 +5,7 @@ This module facilitate connection with the switch through SSH.
 import logging
 import os
 import paramiko
-from .BaseComm import BaseComm
+from .base import Base
 
 class SSHCredential:
     """
@@ -43,7 +43,7 @@ class SSHCredential:
         with open(SSHCredential.config_path) as f:
             SSHCredential.config.parse(f)
 
-class SSH(BaseComm):
+class SSH(Base):
     def __init__(self):
         # Set the logger.
         self.logger = logging.getLogger('libswitch.comm.SSH')

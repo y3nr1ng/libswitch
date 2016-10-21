@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-class BaseComm(metaclass=ABCMeta):
+class Base(metaclass=ABCMeta):
     @abstractmethod
     def connect(self, dest_cred, via=None):
         pass
