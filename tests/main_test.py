@@ -18,6 +18,12 @@ c.connect(target, via=vias)
 #res = c.receive()
 #logger.info(res)
 
-cmd = Cisco()
-cmd.setComm(c)
-c.listChannel()
+c.send('sh ru');
+res = c.receive()
+with open('csie_core_config', 'w') as f:
+	f.write(res)
+logger.info('SH RU completed')
+
+#cmd = Cisco()
+#cmd.setComm(c)
+#cmd.listChannel()

@@ -14,8 +14,13 @@ class Cisco(Base):
 
     def listChannel(self):
         c = self.comm
-        req = 'sh int sum | i ({})'.format('|'.join(list))
+
+        # Construct and send the request.
+        req = 'sh int sum | i ({})'.format('|'.join(ActualChanType))
         c.send(req)
+
         res = c.receive()
 
-        logger.info(res)
+        # Split enable state.
+        
+        self.logger.info(res)
