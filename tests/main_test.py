@@ -3,27 +3,22 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 from libswitch.comm import SSH as Comm
-from secret import vias, target
+from secret import vias, targets
 
 from libswitch.commands import Cisco
 
 import logging
 logger = logging.getLogger('libswitch.tests')
 
-c = Comm()
-c.connect(target, via=vias)
+for target in targets:
+	print(' >> {}'.format(target.host))
+	
+	c = Comm()
+	c.connect(target, via=vias)
 
-##DEBUG
-#c.send('sh ver | i uptime|''IOS Software''|''Boot Loader''')
-#res = c.receive()
-#logger.info(res)
+	s = 'copy run start'
+	c.send(s);
 
-c.send('sh ru');
-res = c.receive()
-with open('csie_core_config', 'w') as f:
-	f.write(res)
-logger.info('SH RU completed')
-
-#cmd = Cisco()
-#cmd.setComm(c)
-#cmd.listChannel()
+	res = c.receive()
+	with open(target.host, 'w') as f:
+		f.write(res)
